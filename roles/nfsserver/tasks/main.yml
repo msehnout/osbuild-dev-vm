@@ -1,0 +1,5 @@
+- name: Enable nfs-server
+  systemd:
+    name: nfs-server
+    state: started
+    enabled: yes

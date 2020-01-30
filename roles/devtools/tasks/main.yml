@@ -1,0 +1,21 @@
+- name: Install development tools and libraries
+  dnf:
+    name:
+      # Groups with useful tools like rpmbuild, make, etc.
+      - '@C Development Tools and Libraries'
+      - '@Development Tools'
+      - '@RPM Development Tools'
+      # Some CLI utilities for convenient usage
+      - 'bash-completion'
+      - 'zsh'
+      - 'fish'
+      - 'vim'
+      - 'tig'
+      - 'htop'
+      - 'tmux'
+      - 'fd-find'
+      - 'ripgrep'
+      - 'tree'
+      # For macOS
+      - 'virtualbox-guest-additions'
+    state: present
