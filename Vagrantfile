@@ -16,12 +16,13 @@ Vagrant.configure("2") do |config|
   config.vm.box = "fedora/31-cloud-base"
   config.vm.box_version = "31.20191023.0"
   config.vm.network "forwarded_port", guest: 9090, host: 9090, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 80, host: 9091, host_ip: "127.0.0.1"
 
   # Provider-specific configuration
   if OS.mac?
     # This is needed for the NFS to work
-    config.vm.network "private_network", type: "dhcp"
     puts "Running on macOS"
+    config.vm.network "private_network", ip: "127.0.0.10"
     config.vm.provider "virtualbox" do |vb|
       # Customize the amount of memory on the VM:
       vb.memory = 4096
@@ -39,7 +40,7 @@ Vagrant.configure("2") do |config|
 
   # Use :ansible or :ansible_local to
   # select the provisioner of your choice
-  config.vm.provision :ansible_local do |a|
+  config.vm.provision :ansible do |a|
     a.playbook = "playbook.yml"
     a.become = true
   end
@@ -53,7 +54,7 @@ Vagrant.configure("2") do |config|
   # This does not work by default, see README for workaround
   if OS.mac?
     synced_directories.each do |dir|
-      config.vm.synced_folder dir[0], dir[1], type: "nfs"
+      config.vm.synced_folder dir[0], dir[1], type: "rsync"
     end 
   else
     synced_directories.each do |dir|
